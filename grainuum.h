@@ -264,7 +264,7 @@ struct {                                                    \
     (name).head += GRAINUUM_BUFFER_ELEMENT_SIZE;            \
     if ((name).head >= sizeof((name).buffer))               \
       (name).head = 0;                                      \
-    name ## _head_ptr = (name.buffer + name.head);          \
+    name ## _head_ptr = ((name).buffer + (name).head);      \
   } while(0)
 #define GRAINUUM_BUFFER_TOP(name)                           \
   (&((name).buffer[(name).tail]))
