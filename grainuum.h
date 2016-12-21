@@ -262,7 +262,7 @@ struct {                                                    \
 #define GRAINUUM_BUFFER_ADVANCE(name)                       \
   do {                                                      \
     (name).head += GRAINUUM_BUFFER_ELEMENT_SIZE;            \
-    if ((name).head > sizeof((name).buffer))                \
+    if ((name).head >= sizeof((name).buffer))               \
       (name).head = 0;                                      \
     name ## _head_ptr = (name.buffer + name.head);          \
   } while(0)
@@ -271,7 +271,7 @@ struct {                                                    \
 #define GRAINUUM_BUFFER_REMOVE(name)                        \
   do {                                                      \
     (name).tail += GRAINUUM_BUFFER_ELEMENT_SIZE;            \
-  if ((name).tail > sizeof((name).buffer))                  \
+  if ((name).tail >= sizeof((name).buffer))                 \
     (name).tail = 0;                                        \
   } while(0)
 #define GRAINUUM_BUFFER_IS_EMPTY(name)                      \
