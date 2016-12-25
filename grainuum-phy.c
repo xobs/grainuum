@@ -158,7 +158,7 @@ void grainuumInit(struct GrainuumUSB *usb,
   grainuumInitPre(usb);
 
   usb->cfg = cfg;
-  usb->mac.usb = usb;
+  usb->state.usb = usb;
   cfg->usb = usb;
 
   usb->initialized = 1;

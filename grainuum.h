@@ -35,12 +35,12 @@
 #include <stdint.h>
 
 /**
- * @brief   Extra fields for GrainuumMAC struct.
+ * @brief   Extra fields for GrainuumState struct.
  * @note    You probably can ignore this.
  */
-#ifndef GRAINUUM_MAC_EXTRA
-#define GRAINUUM_MAC_EXTRA
-#endif /* GRAINUUM_MAC_EXTRA */
+#ifndef GRAINUUM_STATE_EXTRA
+#define GRAINUUM_STATE_EXTRA
+#endif /* GRAINUUM_STATE_EXTRA */
 
 /**
  * @brief   Extra fields for GrainuumUSB struct.
@@ -73,7 +73,7 @@ enum usb_pids {
 };
 
 struct GrainuumUSB;
-struct GrainuumMAC;
+struct GrainuumState;
 struct GrainuumConfig;
 
 /* Function callbacks */
@@ -292,7 +292,7 @@ struct GrainuumConfig {
   struct GrainuumUSB       *usb;
 } __attribute__((packed, aligned(4)));
 
-struct GrainuumMAC {
+struct GrainuumState {
   struct GrainuumUSB *usb;
 
   uint8_t data_in[8];
@@ -314,7 +314,7 @@ struct GrainuumMAC {
 
   uint8_t address;          /* Our configured address */
 
-  GRAINUUM_MAC_EXTRA
+  GRAINUUM_STATE_EXTRA
 } __attribute__((packed, aligned(4)));
 
 struct GrainuumUSB {
@@ -343,7 +343,7 @@ struct GrainuumUSB {
   uint32_t queued_epnum;
   const void *queued_data;
 
-  struct GrainuumMAC mac;     /* Associated MAC */
+  struct GrainuumState state;     /* Associated state */
 
   GRAINUUM_EXTRA
 } __attribute__((packed, aligned(4)));
