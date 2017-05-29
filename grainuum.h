@@ -165,8 +165,8 @@ struct usb_setup_packet {
   union {
     uint16_t wValue;
     struct {
-      uint8_t wValueH;
       uint8_t wValueL;
+      uint8_t wValueH;
     };
   };
   uint16_t wIndex;
