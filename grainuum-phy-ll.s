@@ -573,32 +573,34 @@ wstuff    .req r0   /* The last six bits, used for bit stuffing (reuses wusbphy)
 
   ldr wtmp1, [wusbphy, #dnSAddr]    // Cache D- Set addr
   str wtmp1, [sp, #0]               // Save it on the stack
+  // 4
 
   /* Save passed-in values on the stack, before we scribble over them. */
   str wusbphy, [sp, #4]             // Save wusbphy,
   mov wbytes, r1                    // byte pointer,
   add r2, r2, r1                    // calculate the end of the array
   mov wend, r2                      // and save it too.
+  // 5
 
   /* Load the next byte into wpkt */
   mov wtmp1, wbytes                 // Load the byte pointer
   ldrb wpkt, [wtmp1]                // Get the actual byte
   add wtmp1, #1                     // Increase the byte pointer
   mov wbytes, wtmp1                 // Save the byte pointer back into wbytes
+  // 5
 
   mvn wpkt, wpkt                    // Invert the value to make the tests work
   mov wleft, #8                     // Start over with 8 bytes.
-  // ?
+  // 2
 
 usb_phy_write__get_first_packet:
   mov wlastsym, #1                  // Last symbols were "KK" from the header,
   mov wstuff, #0b111100             // so load a run of 2 into the stuff value.
-  // ?
-
-  //bl usb_phy__wait_5_cycles
+  // 2
 
   // usb start-of-frame header //
   /*bl usb_phy_write__state_k // K state entered above already */
+  bl usb_phy__wait_6_cycles
   bl usb_phy_write__state_j
   bl usb_phy_write__state_k
   bl usb_phy_write__state_j
@@ -686,7 +688,7 @@ usb_phy_write__continue_byte:
 usb_phy_write__stuff_bit:
   /* When we get here, we are already into the packet. */
 // Need 18 cycles until packet is written
-  bl usb_phy__wait_5_cycles
+  bl usb_phy__wait_6_cycles
   mov wstuff, #0b111111             // Clear out the bit-stuff rcounter
   // 2
 
@@ -716,7 +718,7 @@ usb_phy_write__stuff_out:
   b usb_phy_write__done_stuffing_bit
 
 usb_phy_write__eof_stuff_bit:
-  bl usb_phy__wait_18_cycles
+  bl usb_phy__wait_12_cycles
   mov wstuff, #0b111111             // Clear out the bit-stuff rcounter
   // 2
 
@@ -749,7 +751,7 @@ usb_phy_write__send_eof:
   and wtmp2, wstuff                 // AND the two together.  If they're the
   beq usb_phy_write__eof_stuff_bit  // same, then stuff one bit.
 
-  bl usb_phy__wait_14_cycles
+  bl usb_phy__wait_16_cycles
 usb_phy_write__send_se0:
   bl usb_phy_write__state_se0
   bl usb_phy_write__state_se0
@@ -767,7 +769,7 @@ usb_phy_write__send_se0:
   /* Cheat a bit on the end-of-packet time, since the following
    * instructions take roughly 10 cycles before the lines reset.
    */
-  bl usb_phy__wait_24_cycles
+  bl usb_phy__wait_28_cycles
 
   // --- Done Transmitting --- //
 
@@ -812,7 +814,7 @@ usb_phy_write__state_k:
 usb_phy_write__out_func:
   str wpmask, [wpaddr]
   str wnmask, [wnaddr]
-  b usb_phy__wait_24_cycles
+  b usb_phy__wait_25_cycles
 
 .endfunc
 .type usbPhyWriteI, %function
