@@ -364,7 +364,8 @@ usb_unstuff:
   // NOTE that we don't increment "rcounter" here.
   mov runstuff, rone                  // We're skipping over one bit, which
                                       // results in a new run of one.
-  // 1
+  add runstuff, rone
+  // 2
 
   /* Invert the last value, since a false 0 was added to the stream */
   mov rreg, rlastval                  // Read the current last val into a lo reg.
@@ -379,7 +380,7 @@ usb_unstuff:
   bgt usb_phy_read__exit              // Exit if so
   // 2
 
-  bl usb_phy__wait_23_cycles
+  bl usb_phy__wait_22_cycles
 
   b usb_phy_read__get_usb_bit
   // 2
