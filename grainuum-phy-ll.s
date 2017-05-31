@@ -284,7 +284,7 @@ usb_phy_read__start_reading_usb:
 
 usb_phy_read__get_usb_bit:
   mov rval, rdpiaddr                  // Get the address of the D+ input bank.
-  mov rreg, rdniaddr                  // Get the address of the D+ input bank.
+  mov rreg, rdniaddr                  // Get the address of the D- input bank.
   ldr rval, [rval]                    // Actually sample D+
   ldr rreg, [rreg]                    // Also sample D-
 
