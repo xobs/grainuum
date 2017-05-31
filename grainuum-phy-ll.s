@@ -30,7 +30,7 @@
  ****************************************************************************/
 
 #ifndef GRAINUUM_SECTION
-#define GRAINUUM_SECTION .ramtest
+#define GRAINUUM_SECTION .ramtext
 #endif 
 .section GRAINUUM_SECTION /* Can also run out of .section .text */
 
