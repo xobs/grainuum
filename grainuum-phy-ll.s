@@ -817,16 +817,3 @@ usb_phy_write__out_func:
 .endfunc
 .type usbPhyWriteI, %function
 .size usbPhyWriteI, .-usbPhyWriteI
-
-/*
-.func NMI_Handler
-.global NMI_Handler
-NMI_Handler:
-  nop
-  nop
-  nop
-  bx lr
-.endfunc
-.type NMI_Handler, %function
-.size NMI_Handler, .-NMI_Handler
-*/
