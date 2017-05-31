@@ -355,7 +355,7 @@ usb_phy_read__check_unstuff:
   bne usb_phy_read__get_usb_bit
   // 2 (if branch taken, 1 if unstuffing needs to happen)
 
-usb_unstuff:
+usb_phy_read__unstuff:
   nop                                 // We get here when the current bit has
                                       // one more clock cycle left.  Add a nop
                                       // just to make the cycle-counting easier.
