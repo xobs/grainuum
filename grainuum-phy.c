@@ -103,7 +103,6 @@ void grainuumCaptureI(struct GrainuumUSB *usb, uint8_t *samples)
     }
 
     usbPhyWriteI(usb, usb->queued_data, usb->queued_size);
-    grainuum_receive_packet(usb);
     goto out;
   }
   else if (samples[0] == USB_PID_SETUP) {
