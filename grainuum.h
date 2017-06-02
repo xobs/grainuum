@@ -447,6 +447,28 @@ int grainuumInitialized(struct GrainuumUSB *usb);
 int grainuumSendData(struct GrainuumUSB *usb, int epnum, const void *data, int size);
 
 /**
+ * @brief   Clears the send buffer, if not empty.
+ * @note    If data has already been queued for the PHY, then
+ *          this will not prevent it from being sent.
+ *          This function is intended to be used to prevent
+ *          grainuumSendData() from returning -EAGAIN.
+ * @param[in] usb     pointer to the @p GrainuumUSB object.
+ * @api
+ */
+void grainuumDropData(struct GrainuumUSB *usb);
+
+/**
+ * @brief   Determines if data is already queued.
+ * @note    If data has been queued, then this will return
+ *          nonzero.  If this returns zero, then you can
+ *          trust grainuumSendData() will succeed.
+ * @param[in] usb     pointer to the @p GrainuumUSB object.
+ * @return            Nonzero if data is already queued.
+ * @api
+ */
+int grainuumDataQueued(struct GrainuumUSB *usb);
+
+/**
  * @brief   Process one received packet through the Grainuum state machine.
  * @note    This feeds USB packets into the state machine.  It should not
  *          be called as part of an interrupt.
