@@ -50,8 +50,24 @@
 #define GRAINUUM_EXTRA
 #endif /* GRAINUUM_EXTRA */
 
+#define GET_STATUS 0
+#define CLEAR_FEATURE 1
+#define SET_FEATURE 3
 #define SET_ADDRESS 5
+#define GET_DESCRIPTOR 6
+#define SET_DESCRIPTOR 7
+#define GET_CONFIGURATION 8
 #define SET_CONFIGURATION 9
+#define GET_INTERFACE 10
+#define SET_INTERFACE 11
+#define SYNC_FRAME 12
+
+#define GET_REPORT 1
+#define GET_IDLE 2
+#define GET_PROTOCOL 3
+#define SET_REPORT 9
+#define SET_IDLE 10
+#define SET_PROTOCOL 11
 
 enum usb_pids {
   USB_PID_RESERVED = 0xf0,
