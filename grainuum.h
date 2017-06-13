@@ -267,7 +267,10 @@ struct {                                                    \
   uint8_t  head;                                            \
   uint8_t  tail;                                            \
   uint8_t  padding;                                         \
-  uint8_t  buffer[(sz) * GRAINUUM_BUFFER_ELEMENT_SIZE];     \
+  union {                                                   \
+    uint8_t  buffer[(sz) * GRAINUUM_BUFFER_ELEMENT_SIZE];   \
+    uint8_t  elements[sz][GRAINUUM_BUFFER_ELEMENT_SIZE];    \
+  };                                                        \
 } name __attribute__((aligned(4)));                         \
 uint8_t * name ## _head_ptr;
 #define GRAINUUM_BUFFER_INIT(name)                          \
