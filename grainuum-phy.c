@@ -82,51 +82,56 @@ __attribute__((section(".ramtext")))
 void grainuumCaptureI(struct GrainuumUSB *usb, uint8_t *samples)
 {
   int ret;
+  const uint8_t nak_pkt[] = {USB_PID_NAK};
+  const uint8_t ack_pkt[] = {USB_PID_ACK};
 
   ret = usbPhyReadI(usb, samples);
-  if (ret <= 0)
-    goto out;
+  if (ret <= 0) {
+    if (ret != -1)
+      usbPhyWriteI(usb, nak_pkt, sizeof(nak_pkt));
+    return;
+  }
 
   /* Save the byte counter for later inspection */
   samples[11] = ret;
 
-  if (samples[0] == USB_PID_IN) {
-
+  switch (samples[0]) {
+  case USB_PID_IN:
     /* Make sure we have queued data, and that it's for this particular EP */
     if ((!usb->queued_size)
     || (((((const uint16_t *)(samples+1))[0] >> 7) & 0xf) != usb->queued_epnum))
     {
-      const uint8_t pkt[] = {USB_PID_NAK};
-      usbPhyWriteI(usb, pkt, sizeof(pkt));
-      goto out;
+      usbPhyWriteI(usb, nak_pkt, sizeof(nak_pkt));
+      break;
     }
 
     usbPhyWriteI(usb, usb->queued_data, usb->queued_size);
-    goto out;
-  }
-  else if (samples[0] == USB_PID_SETUP) {
+    break;
+
+  case USB_PID_SETUP:
     grainuum_receive_packet(usb);
-    goto out;
-  }
-  else if (samples[0] == USB_PID_OUT) {
+    break;
+
+  case USB_PID_OUT:
     grainuum_receive_packet(usb);
-    goto out;
-  }
-  else if (samples[0] == USB_PID_ACK) {
+    break;
+
+  case USB_PID_ACK:
     /* Allow the next byte to be sent */
     usb->queued_size = 0;
     grainuum_receive_packet(usb);
-    goto out;
-  }
+    break;
 
-  else if ((samples[0] == USB_PID_DATA0) || (samples[0] == USB_PID_DATA1)) {
-    const uint8_t pkt[] = {USB_PID_ACK};
-    usbPhyWriteI(usb, pkt, sizeof(pkt));
+  case USB_PID_DATA0:
+  case USB_PID_DATA1:
+    usbPhyWriteI(usb, ack_pkt, sizeof(ack_pkt));
     grainuum_receive_packet(usb);
-    goto out;
-  }
+    break;
 
-out:
+  default:
+    usbPhyWriteI(usb, nak_pkt, sizeof(nak_pkt));
+    break;
+  }
 
   return;
 }
